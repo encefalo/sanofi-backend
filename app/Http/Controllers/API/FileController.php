@@ -7,6 +7,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\File;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 
@@ -35,23 +36,31 @@ class FileController extends BaseController {
     public function store(Request $request) {
         $input = $request->all();
 
-
         $validator = Validator::make($input, [
             'name' => 'required',
             'patient' => 'required',
             'id_form' => 'required',
-            'type' => 'required'
+            'type' => 'required',
         ]);
+
+        //get the base-64 from data
+        $base64_str = substr($input['url'], strpos($input['url'], ",")+1);
+
+        //decode base64 string
+        $image = base64_decode($base64_str);
+
+        $safeName = str_random(10).'.'.'png';
+        Storage::disk('public')->put('sanofi/' . $input['type'] . '/' . $safeName, $image);
+
+        $path = '/storage/sanofi/' . $input['type'] . '/' . $safeName;
 
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-
+        $input['url'] = $path;
         $product = File::create($input);
-
-
         return $this->sendResponse($product->toArray(), 'File created successfully.');
     }
 
