@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 Route::post('register', 'API\UserController@register');
 Route::post('login', 'API\UserController@login');
 
+Route::get('usersprm', 'API\UserPRMController@index');
+
 Route::middleware('auth:api')->group( function () {
     Route::resource('files', 'API\FileController');
 });

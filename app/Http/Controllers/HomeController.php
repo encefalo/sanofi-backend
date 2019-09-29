@@ -272,15 +272,16 @@ class HomeController extends Controller {
         $client = new Client(
             [
                 'defaults' => [
-                    'headers'  => [
+                    'headers' => [
                         'content-type' => 'application/x-www-form-urlencoded',
-                        'Accept' => 'application/json'
+                        'Accept' => 'application/json',
                     ],
                 ],
             ]
         );
         $sessionName = $this->getSessionName();
-        $cities = ['EL ENCANTO',
+        $cities = [
+            'EL ENCANTO',
             'LA CHORRERA',
             'LA PRADERA',
             'LETICIA',
@@ -1385,15 +1386,20 @@ class HomeController extends Controller {
             'NUEVA ANTIOQUIA',
             'PRIMAVERA',
             'PUERTO CARRENO',
-            'SAN JOSE OCUPE',];
+            'SAN JOSE OCUPE',
+        ];
         $products = json_decode($client->request('GET',
-            $baseUrl . '?operation=describe&sessionName=' . $sessionName . '&elementType=Potentials')->getBody())->result->fields;
+            $baseUrl . '?operation=describe&sessionName=' . $sessionName . '&elementType=Potentials')
+            ->getBody())->result->fields;
         $accounts = $this->getFieldsToShow(json_decode($client->request('GET',
-            $baseUrl . '?operation=describe&sessionName=' . $sessionName . '&elementType=Accounts')->getBody())->result->fields);
+            $baseUrl . '?operation=describe&sessionName=' . $sessionName . '&elementType=Accounts')
+            ->getBody())->result->fields);
         $users = json_decode($client->request('GET',
-            $baseUrl . '?operation=query&sessionName=' . $sessionName . '&query=select * from Users;')->getBody())->result;
+            $baseUrl . '?operation=query&sessionName=' . $sessionName . '&query=select * from Users;')
+            ->getBody())->result;
         $medicines = json_decode($client->request('GET',
-            $baseUrl . '?operation=query&sessionName=' . $sessionName . '&query=select * from Potentials;')->getBody())->result;
+            $baseUrl . '?operation=query&sessionName=' . $sessionName . '&query=select * from Potentials;')
+            ->getBody())->result;
         return view('layouts.welcome', compact(['products', 'accounts', 'users', 'medicines', 'cities', 'currentTime']));
     }
 
