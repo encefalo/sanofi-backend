@@ -17,6 +17,7 @@ Route::post('register', 'API\UserController@register');
 Route::post('login', 'API\UserController@login');
 
 Route::get('usersprm', 'API\UserPRMController@index');
+Route::get('health/{type}', 'API\UserPRMController@health');
 
 Route::middleware('auth:api')->group( function () {
     Route::resource('files', 'API\FileController');
